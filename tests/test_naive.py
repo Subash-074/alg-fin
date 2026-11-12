@@ -1,7 +1,6 @@
-import math
 import unittest
 
-from stage4_naive import naive_causal_attention, naive_generate
+from naive import naive_causal_attention, naive_generate
 
 
 IDENTITY_2 = [[1.0, 0.0], [0.0, 1.0]]
