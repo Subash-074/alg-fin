@@ -33,22 +33,41 @@ alg-fin/
 - Python 3.9 or newer
 - No third-party packages
 
-## Run the tests
+## Open a terminal in the project folder
 
-From the project directory:
+In VS Code, choose **Terminal > New Terminal**. Make sure the terminal is in
+the folder containing `naive.py` and `README.md`. If it is not, change to your
+project folder with:
 
-```bash
-python -m unittest discover -v
+```powershell
+cd "C:\path\to\alg-fin"
 ```
 
-The suite contains 12 tests covering attention masking, output shapes,
-generation behavior, input validation, and QK operation counts.
+Check that Python is available:
 
-## Usage
+```powershell
+py --version
+```
+
+On Windows, use `py` in the commands below. If `python` works on your
+computer, you can use `python` instead.
+
+## Run the implementation
+
+`naive.py` is a module that defines the attention and generation functions. It
+does not print anything when run by itself; that is expected:
+
+```powershell
+py naive.py
+```
+
+To see generation output, create a file named `demo.py` next to `naive.py`,
+paste in this example, then run `py demo.py`:
 
 ```python
 from naive import naive_generate
 
+# Example token embeddings for token IDs 0, 1, and 2.
 embeddings = {
     0: [1.0, 0.0],
     1: [0.0, 1.0],
@@ -72,9 +91,34 @@ print("QK multiplications:", result.qk_multiply_count)
 print("QK additions:", result.qk_add_count)
 ```
 
-`logits_fn` stands in for a model's output projection and vocabulary head. The
-implementation selects the highest-scoring vocabulary index; ties choose the
-lowest index.
+The example should print generated tokens `[0, 1, 1, 1]`. `logits_fn` stands in
+for a model's output projection and vocabulary head. The implementation picks
+the highest-scoring vocabulary index; ties choose the lowest index.
+
+## Run the tests
+
+Run just the test file as a module:
+
+```powershell
+py -m unittest tests.test_naive -v
+```
+
+Or discover and run all tests in the project:
+
+```powershell
+py -m unittest discover -v
+```
+
+The suite currently has 12 tests. A successful run ends with `OK`. Run these
+commands from the project folder. Use `-m unittest` rather than running
+`tests\test_naive.py` directly; module mode lets Python find `naive.py` in the
+project root.
+
+## API usage
+
+The example above imports the function with `from naive import naive_generate`.
+It needs a prompt, an embedding function, query/key/value weight matrices, and
+a function that returns one logit per vocabulary token.
 
 ## Complexity
 
